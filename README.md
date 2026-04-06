@@ -5,7 +5,7 @@ A personal portfolio website showcasing my projects, skills, achievements, and e
 ---
 
 ## 🚀 Live Website
-🔗 https://your-username.github.io/dakshata-portfolio/
+🔗 https://github.com/dakshatam21/dakshata-portfolio/
 
 ---
 
