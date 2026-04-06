@@ -13,7 +13,7 @@ let pi = 0, ci = 0, del = false;
 const typingEl = document.getElementById('typingEl');
 function type() {
   const phrase = phrases[pi];
-  if (!del) { ci++; typingEl.innerHTML = phrase.slice(0,ci)+'<span class="cursor"></span>'; if(ci===phrase.length){del=true;setTimeout(type,1800);return;} }
+  if (!del) { ci++; typingEl.innerHTML = phrase.slice(0,ci)+'<span class="cursor"></span>'; if(ci===phrase.length){del=true;setTimeout(type,1300);return;} }
   else      { ci--; typingEl.innerHTML = phrase.slice(0,ci)+'<span class="cursor"></span>'; if(ci===0){del=false;pi=(pi+1)%phrases.length;} }
   setTimeout(type, del?40:60);
 }
