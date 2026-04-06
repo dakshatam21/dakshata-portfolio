@@ -147,7 +147,7 @@ section:nth-child(even){background:var(--dark-bg2);}
 .exp-skill-chip{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;background:rgba(139,92,246,.15);color:var(--purple-lt);border:1px solid rgba(139,92,246,.28);}
 
 /* ━━ PROJECTS ━━ */
-.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.projects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;}
 
 /* project 5 spans 2 cols so tech chips don't overflow */
 .proj-card--wide{grid-column:span 2;}
