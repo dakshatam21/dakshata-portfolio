@@ -219,7 +219,7 @@ function animateCounter(el, target, isFloat, suffix) {
 const statNums = document.querySelectorAll('.stat-num');
 const statsData = [
   { target: 9.78, isFloat: true,  suffix: '' },
-  { target: 6,    isFloat: false, suffix: '+' },
+  { target: 4,    isFloat: false, suffix: '+' },
   { target: 2,    isFloat: false, suffix: 'nd' },
 ];
  
