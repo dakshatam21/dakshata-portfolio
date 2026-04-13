@@ -108,3 +108,180 @@ function submitForm(e) {
   e.target.reset();
   setTimeout(() => document.getElementById('formSuccess').style.display = 'none', 4000);
 }
+
+
+/* ── 1. CUSTOM CURSOR ── */
+const cursorDot  = document.createElement('div');
+const cursorRing = document.createElement('div');
+cursorDot.className  = 'cursor-dot';
+cursorRing.className = 'cursor-ring';
+document.body.appendChild(cursorDot);
+document.body.appendChild(cursorRing);
+ 
+let mouseX = 0, mouseY = 0;
+let ringX  = 0, ringY  = 0;
+ 
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
+});
+ 
+// Ring follows with smooth lag
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.12;
+  ringY += (mouseY - ringY) * 0.12;
+  cursorRing.style.transform = `translate(${ringX}px, ${ringY}px)`;
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+ 
+// Ring grows on hovering clickable elements
+document.querySelectorAll('a, button, .proj-card, .exp-card, .skill-category-card, .achv-card').forEach(el => {
+  el.addEventListener('mouseenter', () => cursorRing.classList.add('cursor-ring--hover'));
+  el.addEventListener('mouseleave', () => cursorRing.classList.remove('cursor-ring--hover'));
+});
+ 
+ 
+/* ── 2. HERO PARTICLE STARS ── */
+(function createStars() {
+  const hero = document.getElementById('home');
+  if (!hero) return;
+ 
+  const canvas = document.createElement('canvas');
+  canvas.className = 'star-canvas';
+  hero.prepend(canvas);
+ 
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+ 
+  function resize() {
+    canvas.width  = hero.offsetWidth;
+    canvas.height = hero.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', () => { resize(); initStars(); });
+ 
+  function initStars() {
+    stars = Array.from({ length: 90 }, () => ({
+      x:     Math.random() * canvas.width,
+      y:     Math.random() * canvas.height,
+      r:     Math.random() * 1.5 + 0.3,
+      alpha: Math.random(),
+      speed: Math.random() * 0.008 + 0.003,
+      dx:    (Math.random() - 0.5) * 0.25,
+      dy:    (Math.random() - 0.5) * 0.25,
+    }));
+  }
+  initStars();
+ 
+  function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      s.alpha += s.speed;
+      if (s.alpha > 1 || s.alpha < 0) s.speed *= -1;
+      s.x += s.dx;
+      s.y += s.dy;
+      if (s.x < 0) s.x = canvas.width;
+      if (s.x > canvas.width) s.x = 0;
+      if (s.y < 0) s.y = canvas.height;
+      if (s.y > canvas.height) s.y = 0;
+ 
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(167, 139, 250, ${s.alpha * 0.7})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(drawStars);
+  }
+  drawStars();
+})();
+ 
+ 
+/* ── 3. STAT COUNTER ANIMATION ── */
+function animateCounter(el, target, isFloat, suffix) {
+  const duration = 1800;
+  const start    = performance.now();
+ 
+  function update(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const ease     = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+    const value    = isFloat
+      ? (ease * target).toFixed(2)
+      : Math.floor(ease * target);
+    el.textContent = value + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+ 
+// Trigger counters when hero stats scroll into view
+const statNums = document.querySelectorAll('.stat-num');
+const statsData = [
+  { target: 9.78, isFloat: true,  suffix: '' },
+  { target: 6,    isFloat: false, suffix: '+' },
+  { target: 2,    isFloat: false, suffix: 'nd' },
+];
+ 
+let countersStarted = false;
+function checkCounters() {
+  if (countersStarted) return;
+  const firstStat = statNums[0];
+  if (!firstStat) return;
+  const rect = firstStat.getBoundingClientRect();
+  if (rect.top < window.innerHeight - 40) {
+    countersStarted = true;
+    statNums.forEach((el, i) => {
+      if (statsData[i]) {
+        const { target, isFloat, suffix } = statsData[i];
+        animateCounter(el, target, isFloat, suffix);
+      }
+    });
+  }
+}
+window.addEventListener('scroll', checkCounters);
+checkCounters();
+ 
+ 
+/* ── 4. SECTION ENTRANCE — staggered children ── */
+const staggerSelectors = '.skills-grid .skill-category-card, .achv-grid .achv-card, .about-stats-row .about-stat';
+ 
+document.querySelectorAll(staggerSelectors).forEach((el, i) => {
+  el.style.opacity    = '0';
+  el.style.transform  = 'translateY(28px)';
+  el.style.transition = `opacity 0.55s ease ${i * 0.08}s, transform 0.55s ease ${i * 0.08}s`;
+});
+ 
+function revealStaggered() {
+  document.querySelectorAll(staggerSelectors).forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight - 50) {
+      el.style.opacity   = '1';
+      el.style.transform = 'translateY(0)';
+    }
+  });
+}
+window.addEventListener('scroll', revealStaggered);
+revealStaggered();
+ 
+ 
+/* ── 5. MAGNETIC BUTTONS ── */
+document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width  / 2;
+    const y = e.clientY - rect.top  - rect.height / 2;
+    btn.style.transform = `translate(${x * 0.18}px, ${y * 0.18}px) translateY(-3px)`;
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transform = '';
+  });
+});
+ 
+ 
+/* ── 6. SCROLL-TRIGGERED PROGRESS BAR GLOW ── */
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  document.getElementById('progress-bar').style.boxShadow =
+    pct > 0.05 ? '0 0 10px rgba(167,139,250,0.6)' : 'none';
+});
+ 

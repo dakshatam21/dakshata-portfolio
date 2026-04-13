@@ -266,3 +266,176 @@ footer span{color:var(--purple-lt);}
   .nav-links{display:none;}
   .hamburger{display:flex;}
 }
+
+
+
+/* ── 1. CUSTOM CURSOR ── */
+* { cursor: none !important; }
+ 
+.cursor-dot {
+  position: fixed;
+  top: -4px; left: -4px;
+  width: 8px; height: 8px;
+  background: #a78bfa;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transition: opacity 0.2s;
+  will-change: transform;
+}
+ 
+.cursor-ring {
+  position: fixed;
+  top: -20px; left: -20px;
+  width: 40px; height: 40px;
+  border: 2px solid rgba(167, 139, 250, 0.55);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  will-change: transform;
+  transition: width 0.25s, height 0.25s, border-color 0.25s, top 0.25s, left 0.25s;
+}
+ 
+.cursor-ring--hover {
+  width: 60px; height: 60px;
+  top: -30px; left: -30px;
+  border-color: rgba(124, 58, 237, 0.8);
+  background: rgba(124, 58, 237, 0.06);
+}
+ 
+/* Hide custom cursor on touch devices */
+@media (hover: none) {
+  .cursor-dot, .cursor-ring { display: none; }
+  * { cursor: auto !important; }
+}
+ 
+ 
+/* ── 2. STAR CANVAS (hero background) ── */
+.star-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+ 
+/* Make sure hero content stays above canvas */
+#home .hero-left,
+#home .hero-photo-wrap {
+  position: relative;
+  z-index: 1;
+}
+ 
+ 
+/* ── 3. SKILL CARD SHIMMER on hover ── */
+.skill-category-card {
+  overflow: hidden;
+}
+.skill-category-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(167, 139, 250, 0.07) 50%,
+    transparent 100%
+  );
+  transition: left 0.5s ease;
+  pointer-events: none;
+}
+.skill-category-card:hover::before {
+  left: 150%;
+}
+/* Need position relative for the pseudo-element */
+.skill-category-card { position: relative; }
+ 
+ 
+/* ── 4. PROJECT CARD — glowing border on hover ── */
+.proj-card {
+  border: 1px solid rgba(124, 58, 237, 0.10);
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+.proj-card:hover {
+  border-color: rgba(124, 58, 237, 0.45);
+  box-shadow: 0 20px 60px rgba(124, 58, 237, 0.24),
+              0 0 0 1px rgba(167, 139, 250, 0.15);
+}
+ 
+ 
+/* ── 5. ACHIEVEMENT CARD — left accent line on hover ── */
+.achv-card {
+  border-left: 3px solid transparent;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+.achv-card:hover {
+  border-left-color: var(--purple-lt);
+}
+ 
+ 
+/* ── 6. NAVBAR LINK — underline slide animation ── */
+.nav-links a {
+  position: relative;
+}
+.nav-links a:not(.active)::after {
+  content: '';
+  position: absolute;
+  bottom: 2px; left: 12px;
+  width: 0; height: 1.5px;
+  background: var(--purple-lt);
+  transition: width 0.25s ease;
+  border-radius: 2px;
+}
+.nav-links a:not(.active):hover::after {
+  width: calc(100% - 24px);
+}
+ 
+ 
+/* ── 7. SCROLL PROGRESS BAR — glowing tip ── */
+#progress-bar {
+  transition: width 0.1s linear, box-shadow 0.3s;
+}
+ 
+ 
+/* ── 8. FOOTER — subtle top glow ── */
+footer {
+  position: relative;
+}
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 200px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--purple-lt), transparent);
+}
+ 
+ 
+/* ── 9. BACK TO TOP — pulse ring ── */
+#back-top::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(124, 58, 237, 0.4);
+  animation: pulse-ring 2s ease-out infinite;
+}
+@keyframes pulse-ring {
+  0%   { transform: scale(1);   opacity: 0.6; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+ 
+ 
+/* ── 10. HERO NAME — subtle shimmer on load ── */
+@keyframes shimmer-text {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.hero-name span {
+  background: linear-gradient(90deg, #a78bfa, #7c3aed, #c4b5fd, #7c3aed, #a78bfa);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer-text 4s linear infinite;
+}
