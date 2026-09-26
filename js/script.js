@@ -2,23 +2,6 @@
    script.js — Dakshata Mhatre Portfolio
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-/* ── TYPING EFFECT ── */
-const phrases = [
-  "Aspiring Software Developer",
-  "Computer Engineering Student @ VIT",
-  "Java & DSA Enthusiast",
-  "Web Developer"
-];
-let pi = 0, ci = 0, del = false;
-const typingEl = document.getElementById('typingEl');
-function type() {
-  const phrase = phrases[pi];
-  if (!del) { ci++; typingEl.innerHTML = phrase.slice(0,ci)+'<span class="cursor"></span>'; if(ci===phrase.length){del=true;setTimeout(type,1300);return;} }
-  else      { ci--; typingEl.innerHTML = phrase.slice(0,ci)+'<span class="cursor"></span>'; if(ci===0){del=false;pi=(pi+1)%phrases.length;} }
-  setTimeout(type, del?40:60);
-}
-type();
-
 /* ── SCROLL EVENTS ── */
 const progressBar = document.getElementById('progress-bar');
 const backTop     = document.getElementById('back-top');
@@ -57,6 +40,17 @@ function closeMobile() { document.getElementById('mobileMenu').classList.remove(
 /* ── EXPERIENCE DETAIL PANEL ── */
 const expData = {
   exp1: {
+    title:  "Documentation Head",
+    org:    "IEEE — Vidyalankar Institute of Technology, Mumbai",
+    dur:    "2026 – Present",
+    points: [
+      "Responsible for documentation-related activities for IEEE initiatives",
+      "Maintaining organized records and reports for ongoing IEEE activities",
+      "Supporting structured documentation and communication across events and sessions",
+    ],
+    skills: ["Documentation","Organization","Communication","Teamwork"]
+  },
+  exp2: {
     title:  "Core Member",
     org:    "Creatives & Documentation Council · Student Council, VIT Mumbai",
     dur:    "2025 – Present",
@@ -64,11 +58,10 @@ const expData = {
       "Designed creative content — posters, banners, and digital assets — for college events",
       "Maintained official documentation and structured reports for all council activities",
       "Coordinated with team members to ensure smooth planning and execution of events",
-    
     ],
     skills: ["Leadership","Teamwork","Communication","Creativity","Documentation","Design"]
   },
-  exp2: {
+  exp3: {
     title:  "SIH Internal Hackathon Participant",
     org:    "Smart India Hackathon — Vidyalankar Institute of Technology, Mumbai",
     dur:    "2025",
@@ -76,7 +69,6 @@ const expData = {
       "Participated in the internal round of Smart India Hackathon (SIH) at college level",
       "Worked in a team to ideate and develop an innovative solution for a real-world problem statement",
       "Collaborated on product design, technical planning, and presentation within a tight deadline",
-     
     ],
     skills: ["Problem Solving","Teamwork","Innovation","Rapid Prototyping","Presentation"]
   }
@@ -94,7 +86,7 @@ function showExp(id) {
     <div class="exp-skills-row">${d.skills.map(s=>`<span class="exp-skill-chip">${s}</span>`).join('')}</div>
   `;
 }
-showExp('exp1'); // load first by default
+showExp('exp1'); // IEEE Documentation Head loads first by default
 
 /* ── CONTACT FORM ── */
 function submitForm(e) {
@@ -110,23 +102,23 @@ function submitForm(e) {
 }
 
 
-/* ── 1. CUSTOM CURSOR ── */
+/* ── CUSTOM CURSOR ── */
 const cursorDot  = document.createElement('div');
 const cursorRing = document.createElement('div');
 cursorDot.className  = 'cursor-dot';
 cursorRing.className = 'cursor-ring';
 document.body.appendChild(cursorDot);
 document.body.appendChild(cursorRing);
- 
+
 let mouseX = 0, mouseY = 0;
 let ringX  = 0, ringY  = 0;
- 
+
 document.addEventListener('mousemove', e => {
   mouseX = e.clientX;
   mouseY = e.clientY;
   cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
 });
- 
+
 // Ring follows with smooth lag
 function animateRing() {
   ringX += (mouseX - ringX) * 0.12;
@@ -135,35 +127,35 @@ function animateRing() {
   requestAnimationFrame(animateRing);
 }
 animateRing();
- 
+
 // Ring grows on hovering clickable elements
 document.querySelectorAll('a, button, .proj-card, .exp-card, .skill-category-card, .achv-card').forEach(el => {
   el.addEventListener('mouseenter', () => cursorRing.classList.add('cursor-ring--hover'));
   el.addEventListener('mouseleave', () => cursorRing.classList.remove('cursor-ring--hover'));
 });
- 
- 
-/* ── 2. HERO PARTICLE STARS ── */
+
+
+/* ── HERO PARTICLE DOTS ── */
 (function createStars() {
   const hero = document.getElementById('home');
   if (!hero) return;
- 
+
   const canvas = document.createElement('canvas');
   canvas.className = 'star-canvas';
   hero.prepend(canvas);
- 
+
   const ctx = canvas.getContext('2d');
   let stars = [];
- 
+
   function resize() {
     canvas.width  = hero.offsetWidth;
     canvas.height = hero.offsetHeight;
   }
   resize();
   window.addEventListener('resize', () => { resize(); initStars(); });
- 
+
   function initStars() {
-    stars = Array.from({ length: 90 }, () => ({
+    stars = Array.from({ length: 70 }, () => ({
       x:     Math.random() * canvas.width,
       y:     Math.random() * canvas.height,
       r:     Math.random() * 1.5 + 0.3,
@@ -174,7 +166,7 @@ document.querySelectorAll('a, button, .proj-card, .exp-card, .skill-category-car
     }));
   }
   initStars();
- 
+
   function drawStars() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     stars.forEach(s => {
@@ -186,23 +178,23 @@ document.querySelectorAll('a, button, .proj-card, .exp-card, .skill-category-car
       if (s.x > canvas.width) s.x = 0;
       if (s.y < 0) s.y = canvas.height;
       if (s.y > canvas.height) s.y = 0;
- 
+
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(167, 139, 250, ${s.alpha * 0.7})`;
+      ctx.fillStyle = `rgba(102, 117, 232, ${s.alpha * 0.5})`;
       ctx.fill();
     });
     requestAnimationFrame(drawStars);
   }
   drawStars();
 })();
- 
- 
-/* ── 3. STAT COUNTER ANIMATION ── */
+
+
+/* ── STAT COUNTER ANIMATION ── */
 function animateCounter(el, target, isFloat, suffix) {
   const duration = 1800;
   const start    = performance.now();
- 
+
   function update(now) {
     const progress = Math.min((now - start) / duration, 1);
     const ease     = 1 - Math.pow(1 - progress, 3); // ease-out cubic
@@ -214,15 +206,15 @@ function animateCounter(el, target, isFloat, suffix) {
   }
   requestAnimationFrame(update);
 }
- 
+
 // Trigger counters when hero stats scroll into view
 const statNums = document.querySelectorAll('.stat-num');
 const statsData = [
   { target: 9.78, isFloat: true,  suffix: '' },
   { target: 4,    isFloat: false, suffix: '+' },
-  { target: 2,    isFloat: false, suffix: 'nd' },
+  { target: 3,    isFloat: false, suffix: 'rd' },
 ];
- 
+
 let countersStarted = false;
 function checkCounters() {
   if (countersStarted) return;
@@ -241,17 +233,17 @@ function checkCounters() {
 }
 window.addEventListener('scroll', checkCounters);
 checkCounters();
- 
- 
-/* ── 4. SECTION ENTRANCE — staggered children ── */
+
+
+/* ── SECTION ENTRANCE — staggered children ── */
 const staggerSelectors = '.skills-grid .skill-category-card, .achv-grid .achv-card, .about-stats-row .about-stat';
- 
+
 document.querySelectorAll(staggerSelectors).forEach((el, i) => {
   el.style.opacity    = '0';
   el.style.transform  = 'translateY(28px)';
   el.style.transition = `opacity 0.55s ease ${i * 0.08}s, transform 0.55s ease ${i * 0.08}s`;
 });
- 
+
 function revealStaggered() {
   document.querySelectorAll(staggerSelectors).forEach(el => {
     if (el.getBoundingClientRect().top < window.innerHeight - 50) {
@@ -262,9 +254,9 @@ function revealStaggered() {
 }
 window.addEventListener('scroll', revealStaggered);
 revealStaggered();
- 
- 
-/* ── 5. MAGNETIC BUTTONS ── */
+
+
+/* ── MAGNETIC BUTTONS ── */
 document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
   btn.addEventListener('mousemove', e => {
     const rect = btn.getBoundingClientRect();
@@ -276,12 +268,11 @@ document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
     btn.style.transform = '';
   });
 });
- 
- 
-/* ── 6. SCROLL-TRIGGERED PROGRESS BAR GLOW ── */
+
+
+/* ── SCROLL-TRIGGERED PROGRESS BAR GLOW ── */
 window.addEventListener('scroll', () => {
   const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
   document.getElementById('progress-bar').style.boxShadow =
-    pct > 0.05 ? '0 0 10px rgba(167,139,250,0.6)' : 'none';
+    pct > 0.05 ? '0 0 10px rgba(102,117,232,0.5)' : 'none';
 });
- 
